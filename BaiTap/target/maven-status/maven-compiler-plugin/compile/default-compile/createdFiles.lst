@@ -1,7 +1,7 @@
+utils\DBConnect.class
 controller\LoginServlet.class
 dao\DBConnection.class
 controller\LogoutServlet.class
-ltw3\DBConnect.class
 service\UserService.class
 dao\UserDao.class
 controller\RegisterServlet.class

@@ -2,8 +2,8 @@
 	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>ltw</groupId>
-	<artifactId>ltw3</artifactId>
+	<groupId>baitap2</groupId>
+	<artifactId>baitap2</artifactId>
 	<version>1.0</version>
 	<packaging>war</packaging>
 	<dependencies>
@@ -67,5 +67,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<name>ltwbuoi3</name>
+	<name>baitap2</name>
 </project>

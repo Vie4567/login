@@ -23,7 +23,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./target/ltw3-1.0.war:/usr/local/tomcat/webapps/ltw3.war
+      - ./target/baitap2-1.0.war:/usr/local/tomcat/webapps/baitap2.war
       
 volumes:
   mysql_data:
