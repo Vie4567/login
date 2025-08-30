@@ -13,7 +13,7 @@ public class UserDao {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "SELECT * FROM users WHERE username = ?";
+            String sql = "SELECT * FROM user WHERE username = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             rs = stmt.executeQuery();
@@ -52,7 +52,7 @@ public class UserDao {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+            String sql = "SELECT COUNT(*) FROM user WHERE username = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             rs = stmt.executeQuery();
@@ -87,7 +87,7 @@ public class UserDao {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+            String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
             rs = stmt.executeQuery();
@@ -117,7 +117,7 @@ public class UserDao {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO user (username, email, password) VALUES (?, ?, ?)";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
