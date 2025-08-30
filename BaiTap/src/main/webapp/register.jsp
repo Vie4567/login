@@ -37,17 +37,17 @@
             <div>
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
+                <small>Password must be at least 6 characters</small>
             </div>
             <div>
                 <label for="confirmPassword">Confirm Password:</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" required>
             </div>
-            <button type="submit">Register</button>
+            <div>
+                <button type="submit">Register</button>
+            </div>
         </form>
-        
-        <div class="login-link">
-            <p>Already have an account? <a href="login.jsp">Login here</a></p>
-        </div>
+        <p>Already have an account? <a href="login">Login here</a></p>
     </div>
 </body>
 </html>

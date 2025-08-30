@@ -14,3 +14,15 @@ WHERE NOT EXISTS (SELECT 1 FROM user WHERE username = 'testuser');
 -- Grant privileges to 'user' account
 GRANT ALL PRIVILEGES ON mydb.* TO 'user'@'%';
 FLUSH PRIVILEGES;
+
+CREATE TABLE IF NOT EXISTS category (
+    cate_id INT AUTO_INCREMENT PRIMARY KEY,
+    cate_name VARCHAR(100) NOT NULL,
+    icons VARCHAR(255)
+);
+
+-- Add sample categories for testing
+INSERT INTO category (cate_name, icons) VALUES 
+('Electronics', 'category/electronics.png'),
+('Clothing', 'category/clothing.png'),
+('Books', 'category/books.png');
