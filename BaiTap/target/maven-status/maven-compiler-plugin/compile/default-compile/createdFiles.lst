@@ -4,6 +4,7 @@ service\CategoryServiceImpl.class
 controller\CategoryListController.class
 service\UserService.class
 dao\UserDao.class
+controller\ForgetPasswordServlet.class
 daoImpl\CategoryDAOImpl.class
 connection\DBConnect.class
 utils\IOUtils.class

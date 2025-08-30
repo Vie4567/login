@@ -38,6 +38,7 @@
         
         <div class="register-link">
             <p>Don't have an account? <a href="register.jsp">Register here</a></p>
+            <p><a href="forget-password.jsp">Forget password?</a></p>
         </div>
     </div>
 </body>

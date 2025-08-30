@@ -40,6 +40,39 @@ public class UserDao {
         return user;
     }
 
+    public User getUserByUsernameOrEmail(String username, String email) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        User user = null;
+        try {
+            conn = DBConnection.getConnection();
+            String sql = "SELECT * FROM user WHERE username = ? OR email = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username != null ? username : "");
+            stmt.setString(2, email != null ? email : "");
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) DBConnection.closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return user;
+    }
+
     public boolean checkUserExists(String username) {
         if (username == null || username.trim().isEmpty()) {
             return false;
@@ -137,5 +170,27 @@ public class UserDao {
         }
 
         return success;
+    }
+
+    public void updatePasswordByEmail(String email, String newPassword) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DBConnection.getConnection();
+            String sql = "UPDATE user SET password = ? WHERE email = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, newPassword);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (conn != null) DBConnection.closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
