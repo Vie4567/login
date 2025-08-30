@@ -35,26 +35,58 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        // Debug: log thông tin đầu vào
-        System.out.println("Login attempt: username=" + username + ", password=" + password);
-
+        // Kiểm tra đầu vào
         if (username == null || username.trim().isEmpty() ||
             password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Username and password are required");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
-
+        
+        // Trim input để loại bỏ khoảng trắng
+        username = username.trim();
+        
+        // Giới hạn số lần đăng nhập sai (có thể lưu trong session)
+        HttpSession session = request.getSession();
+        Integer loginAttempts = (Integer) session.getAttribute("loginAttempts");
+        if (loginAttempts == null) {
+            loginAttempts = 0;
+        }
+        
+        if (loginAttempts >= 5) {
+            // Sau 5 lần đăng nhập sai, yêu cầu đợi
+            long lastAttemptTime = session.getAttribute("lastLoginAttempt") != null ? 
+                (long) session.getAttribute("lastLoginAttempt") : 0;
+            long currentTime = System.currentTimeMillis();
+            
+            if (currentTime - lastAttemptTime < 60000) { // 1 phút
+                request.setAttribute("error", "Too many failed login attempts. Please wait for a minute before trying again.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                // Reset counter sau 1 phút
+                session.setAttribute("loginAttempts", 0);
+                loginAttempts = 0;
+            }
+        }
+        
         boolean authenticated = userService.authenticateUser(username, password);
-        System.out.println("Authenticated: " + authenticated);
 
         if (authenticated) {
+            // Reset login attempts counter
+            session.setAttribute("loginAttempts", 0);
+            
+            // Lấy thông tin người dùng và lưu vào session
             User user = userService.getUserByUsername(username);
-            HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            
+            // Chuyển hướng đến trang home
             response.sendRedirect("home.jsp");
         } else {
-            // Đảm bảo luôn báo lỗi nếu sai tài khoản hoặc mật khẩu
+            // Tăng counter đăng nhập sai
+            session.setAttribute("loginAttempts", loginAttempts + 1);
+            session.setAttribute("lastLoginAttempt", System.currentTimeMillis());
+            
             request.setAttribute("error", "Invalid username or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }

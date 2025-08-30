@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnection {
     // Đổi lại thông tin kết nối cho đúng với database của bạn
-    private static final String URL = "jdbc:mysql://mysql:3306/mydb?useSSL=false&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://mysql:3306/mydb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USER = "user"; // Đổi thành user thật nếu khác
     private static final String PASSWORD = "pass123"; // Đổi thành password thật nếu khác
 

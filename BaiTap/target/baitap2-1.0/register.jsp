@@ -3,7 +3,9 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Page</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="container">
@@ -20,12 +22,17 @@
             <div>
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required
-                       value="<%= request.getParameter("username") != null ? request.getParameter("username") : "" %>">
+                       value="<%= request.getAttribute("username") != null ? 
+                               request.getAttribute("username") : 
+                               (request.getParameter("username") != null ? request.getParameter("username") : "") %>">
+                <small>Username must be 3-20 characters, letters and numbers only</small>
             </div>
             <div>
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required
-                       value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>">
+                       value="<%= request.getAttribute("email") != null ? 
+                               request.getAttribute("email") : 
+                               (request.getParameter("email") != null ? request.getParameter("email") : "") %>">
             </div>
             <div>
                 <label for="password">Password:</label>

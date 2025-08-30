@@ -2,12 +2,28 @@ package service;
 
 import dao.UserDao;
 import model.User;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class UserService {
     private UserDao userDAO;
 
     public UserService() {
         this.userDAO = new UserDao();
+    }
+    
+    // Hàm để mã hóa mật khẩu bằng SHA-256
+    private String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public boolean authenticateUser(String username, String password) {
@@ -18,25 +34,31 @@ public class UserService {
         User user = userDAO.getUserByUsername(username);
 
         if (user != null) {
-            // Loại bỏ khoảng trắng ở hai đầu password (nếu có)
+            // Xử lý mật khẩu an toàn
             String dbPassword = user.getPassword();
-            if (dbPassword != null) dbPassword = dbPassword.trim();
-            if (password != null) password = password.trim();
-
-            System.out.println("Input username: " + username);
-            System.out.println("Input password: [" + password + "]");
-            System.out.println("DB username: " + user.getUsername());
-            System.out.println("DB password: [" + dbPassword + "]");
-            System.out.println("Equals? " + password.equals(dbPassword));
-            return password.equals(dbPassword);
-        } else {
-            System.out.println("User not found in DB");
+            if (dbPassword != null && password != null) {
+                // Kiểm tra nếu mật khẩu đã được hash
+                if (dbPassword.length() == 44) { // Độ dài của một chuỗi SHA-256 sau khi mã hóa Base64
+                    return dbPassword.equals(hashPassword(password));
+                } else {
+                    // Nếu mật khẩu chưa hash (legacy), kiểm tra bình thường
+                    return password.equals(dbPassword);
+                }
+            }
         }
-
+        
         return false;
     }
 
     public boolean registerUser(String username, String email, String password) {
+        // Kiểm tra hợp lệ
+        if (username == null || username.trim().isEmpty() || 
+            email == null || email.trim().isEmpty() ||
+            password == null || password.trim().isEmpty()) {
+            return false;
+        }
+        
+        // Kiểm tra username và email đã tồn tại hay chưa
         if (userDAO.checkUserExists(username)) {
             return false;
         }
@@ -45,9 +67,13 @@ public class UserService {
             return false;
         }
 
-        // Loại bỏ khoảng trắng ở hai đầu password khi lưu
-        if (password != null) password = password.trim();
-        User newUser = new User(username, email, password);
+        // Hash mật khẩu trước khi lưu
+        String hashedPassword = hashPassword(password.trim());
+        if (hashedPassword == null) {
+            return false;
+        }
+        
+        User newUser = new User(username.trim(), email.trim(), hashedPassword);
 
         return userDAO.insertUser(newUser);
     }
