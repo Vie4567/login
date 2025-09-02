@@ -21,6 +21,18 @@ Dự án này sử dụng Docker để triển khai:
 
 ## Khởi chạy ứng dụng
 
+- **Truy cập vào MySQL container:**
+  ```powershell
+  docker exec -it my-mysql mysql -uuser -ppass123 mydb
+  ```
+- **Kiểm tra các bảng trong database:**
+  ```sql
+  SHOW TABLES;
+  ```
+- **Xem dữ liệu mẫu trong bảng category:**
+  ```sql
+  SELECT * FROM category;
+  ```
 ### Sử dụng script tự động (khuyến nghị)
 Để khởi động lại ứng dụng với dữ liệu sạch:
 
@@ -35,6 +47,8 @@ Hoặc:
 # Trên Linux/Mac
 ./restart-fresh.sh
 ```
+## Thao tác với database MySQL trong Docker
+
 
 ### Khởi động thủ công
 
